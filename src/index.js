@@ -13,8 +13,13 @@ class KeyvPostgres extends KeyvSql {
 		opts.connect = () => Promise.resolve()
 			.then(() => {
                                 const client = new Client({ connectionString: opts.uri, ssl: {rejectUnauthorized: false} });
-				return sql => client.query(sql)
-					.then(data => data.rows);
+				client.connect();
+                                return sql => client.query(sql)
+					.then(data => {
+client.end();
+return data.rows
+}
+);
 			});
 
 		super(opts);
